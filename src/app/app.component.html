@@ -6,7 +6,9 @@
           >mail_outline</mat-icon
         >
       </button>
-      <span style="color: white;">{{ timerSource | async }}</span>
+      <span style="color: white;" *ngIf="timerSource$ | async as count">{{
+        count
+      }}</span>
     </div>
     <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="center center">
       <button

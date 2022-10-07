@@ -6,6 +6,8 @@ import {
   interval,
   withLatestFrom,
   Observable,
+  switchMap,
+  of,
 } from 'rxjs';
 
 @Component({
@@ -14,30 +16,32 @@ import {
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  timerSource: Observable<number>;
-  timerLiveSubject = new BehaviorSubject<boolean>(false);
-  count: number;
+  timerSource$: Observable<number>;
+  isTimerLive$ = new BehaviorSubject<boolean>(false);
+  isReset$ = new BehaviorSubject<boolean>(false);
 
   constructor() {}
 
   ngOnInit(): void {
-    this.count = 0;
-    this.timerSource = interval(300).pipe(
-      withLatestFrom(this.timerLiveSubject),
-      filter(([v, running]) => running),
-      map(() => this.count++)
+    let count = 0;
+    this.timerSource$ = interval(300).pipe(
+      withLatestFrom(this.isReset$),
+      withLatestFrom(this.isTimerLive$),
+      filter(([[_v, isReset], isLive]) => isReset || isLive),
+      map(([[_v, isReset]]) => (isReset ? (count = 0) : count++))
     );
   }
 
   startReceive() {
-    this.timerLiveSubject.next(true);
+    this.isTimerLive$.next(true);
+    this.isReset$.next(false);
   }
 
   stopReceive() {
-    this.timerLiveSubject.next(false);
+    this.isTimerLive$.next(false);
   }
 
   resetReceive() {
-    this.count = 0;
+    this.isReset$.next(true);
   }
 }
