@@ -16,15 +16,16 @@ import {
 export class AppComponent {
   timerSource: Observable<number>;
   timerLiveSubject = new BehaviorSubject<boolean>(false);
+  count: number;
 
   constructor() {}
 
   ngOnInit(): void {
-    let count = 0;
+    this.count = 0;
     this.timerSource = interval(300).pipe(
       withLatestFrom(this.timerLiveSubject),
       filter(([v, running]) => running),
-      map(() => count++)
+      map(() => this.count++)
     );
   }
 
@@ -34,5 +35,9 @@ export class AppComponent {
 
   stopReceive() {
     this.timerLiveSubject.next(false);
+  }
+
+  resetReceive() {
+    this.count = 0;
   }
 }

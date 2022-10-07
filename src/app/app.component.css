@@ -14,3 +14,28 @@ section {
   min-height: 700px;
   height: 100vh;
 }
+
+div {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+}
+
+span {
+  background: red;
+  border-radius: 50%;
+  height: 22px;
+  width: 22px;
+  line-height: 22px;
+  display: inline-block;
+  text-align: center;
+}
+
+.mailStyle {
+  color: white;
+}
+
+.startStyle {
+  margin-right: 8px;
+}
